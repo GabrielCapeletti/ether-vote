@@ -22,7 +22,7 @@ contract Election {
     }
     
      modifier canVote() {
-        require(electors[msg.sender].canVote == true && electors[msg.sender].ballotId == 0);
+        require(electors[msg.sender].canVote && electors[msg.sender].ballotId == 0);
         _;
     }
    
@@ -53,12 +53,12 @@ contract Election {
             firstElector = msg.sender;
         }
         
-        if(lastElector == 0){
-            lastElector = msg.sender;
-        }else{
-            electors[lastElector].nextElector = msg.sender;
+        if(lastElector != 0){
+            electors[lastElector].nextElector = msg.sender;            
         }
+        lastElector = msg.sender;
     }
+
     
     function getWinner() public view returns(uint)
     {
